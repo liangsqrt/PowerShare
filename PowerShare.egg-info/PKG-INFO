@@ -1,0 +1,14 @@
+Metadata-Version: 1.1
+Name: PowerShare
+Version: 0.0.1
+Summary: 四川电力交易中心的交易数据分享工具
+Home-page: https://github.com/liangl/PowerShare.git
+Author: liangl
+Author-email: liangsqrt@163.com
+License: UNKNOWN
+Description-Content-Type: text/markdown
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
