@@ -3,16 +3,18 @@
 # @Time    : 2019/6/11 0011 7:03
 # @Author  : LiangLiang
 # @Site    : 
-# @File    : get_data.py
+# @File    : trade.py
 # @Software: PyCharm
 import os,sys
-basedir = os.path.dirname(os.path.abspath(__file__))
+import sys,os
+basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(basedir))
 sys.path.append(basedir)
 import pandas as pd
-import numpy as np
-from sqlalchemy.engine import create_engine
-from settings import Settings
-from utils.db_manage import init_engine
+from sqlalchemy.orm.session import sessionmaker
+from PowerShare.settings import Settings
+from PowerShare.func.sql_orm_types import *
+from PowerShare.utils.db_manage import init_engine
 
 
 settings = Settings()
@@ -25,7 +27,9 @@ def get_trade_data(start_time, end_time, trade_id):
     engine = init_engine()
     df = pd.read_sql("select * from fsch_declare_loadDataByTime where trade_id = {trade_id}".format(
         trade_id=trade_id
-    ))
+    ), engine)
+    return df
+
 
 
 def get_basic_trade_table():
@@ -33,10 +37,11 @@ def get_basic_trade_table():
     basic_table = settings["TRADE_TABLE"]
     df = pd.read_sql("select * from {basic_trade_table}".format(basic_trade_table=basic_table), engine)
     del engine
-    print(df)
+    return df
 
 
-def get_detal_trade_table(basic_table_id=None, detail_table_id=None, trade_type=None):
+
+def get_detail_trade_table(basic_table_id=None, detail_table_id=None, trade_type=None):
     """
     用来获得某场交易的详细信息！
     :param basic_table_id:  某批次的所有交易信息
@@ -91,15 +96,92 @@ def get_detal_trade_table(basic_table_id=None, detail_table_id=None, trade_type=
             print(e)
 
 
-def get_fsch_detail(trade_id):
-    assert trade_id, "必须指明交易id"
-    engine = init_engine()
+class FSCHReader(object):
+    def __init__(self):
+        self.settings = Settings()
+        self.settings.setmodule("PowerShare.setting", priority="project")
+        self.engine = init_engine()
+
+    def get_turnover_ratio(self, trade_id):
+        """
+        获取成交占比的详细信息
+        :return:
+        """
+        df = pd.read_sql("select * from `fsch_loadchartsprice` where trade_id='{trade_id}'".format(
+            trade_id=trade_id
+        ), self.engine)
+        return df
+
+    def get_ticket_data(self, trade_id, windows_size=10):
+        """
+        获取盘口的ticket数据
+        :param trade_id:
+        :param windows_size: max 50
+        :return:
+        """
+        df = pd.read_sql("select * from `复式撮合盘口信息` where trade_id = '{trade_id}'".format(
+            trade_id=trade_id
+        ), self.engine)
+        return df
+
+    def get_pankou(self, trade_id):
+        pass
+
+    def get_trade_record(self, trade_id):
+        """
+        获取成交记录信息
+        :param trade_id:
+        :return:
+        """
+        df1 = pd.read_sql("select * from `fsch_loadZpData` where  trade_id='{trade_id}'".format(
+            trade_id=trade_id
+        ), self.engine)
+        unique_df = df1.drop_duplicates(subset=["time", "energy", "price"], keep="first")
+        return unique_df
+
+    def get_declare_info_g(self, trade_id):
+        """
+        购电方的申报信息
+        :param trade_id:
+        :return:
+        """
+        gouf_df = pd.read_sql("select * from `fsch_declare_loadGfData` where trade_id='{trade_id}'".format(
+            trade_id=trade_id
+        ), self.engine)
+        return gouf_df
+
+    def get_declare_info_s(self, trade_id):
+        """
+        售电方申报信息
+        :param trade_id:
+        :return:
+        """
+        gouf_df = pd.read_sql("select * from `fsch_declare_loadSfData` where  trade_id='{trade_id}'".format(
+            trade_id=trade_id
+        ), self.engine)
+        return gouf_df
+
+
+class JZZRReader(object):
+    def __init__(self):
+        self.settings = Settings()
+        self.settings.setmodule("PowerShare.setting", priority="project")
+        self.engine = init_engine()
+
+
+class GPJYReader(object):
+    def __init__(self):
+        self.settings = Settings()
+        self.settings.setmodule("PowerShare.setting", priority="project")
+        self.engine = init_engine()
 
 
 
 
-if __name__ == '__main__':
-    # get_basic_trade_table()
-    # r = get_detal_trade_table(detail_table_id="863D3F5D31509326E053D228B00A625C", trade_type="jzzr")
-    # print(r)
-    print(get_basic_trade_table())
+# if __name__ == '__main__':
+#     thisclass = FSCHReader()
+#     df1 = thisclass.get_trade_record(trade_id="1210003393")
+#     print(df1)
+
+
+

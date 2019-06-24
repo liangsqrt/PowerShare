@@ -15,8 +15,8 @@ SETTINGS_PRIORITIES = {
     'default': 0,
     'command': 10,
     'project': 20,
-    'spider': 30,
-    'cmdline': 40,
+    'programer': 30,
+    'user': 40,
 }
 
 

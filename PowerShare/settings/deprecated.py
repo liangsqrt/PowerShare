@@ -1,5 +1,4 @@
 import warnings
-from scrapy.exceptions import ScrapyDeprecationWarning
 
 DEPRECATED_SETTINGS = [
     ('TRACK_REFS', 'no longer needed (trackref is always enabled)'),
@@ -16,6 +15,12 @@ DEPRECATED_SETTINGS = [
     ('REDIRECT_MAX_METAREFRESH_DELAY', 'use METAREFRESH_MAXDELAY instead'),
     ('LOG_UNSERIALIZABLE_REQUESTS', 'use SCHEDULER_DEBUG instead'),
 ]
+
+class ScrapyDeprecationWarning(Warning):
+    """Warning category for deprecated features, since the default
+    DeprecationWarning is silenced on Python 2.7+
+    """
+    pass
 
 
 def check_deprecated_settings(settings):

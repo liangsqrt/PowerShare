@@ -3,7 +3,7 @@
 # @Time    : 2019/6/11 0011 7:03
 # @Author  : LiangLiang
 # @Site    : 
-# @File    : get_data.py
+# @File    : trade.py
 # @Software: PyCharm
 import pandas as pd
 import numpy as np

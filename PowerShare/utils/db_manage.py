@@ -17,12 +17,12 @@ setting_path = "PowerShare.setting"
 settings.setmodule(setting_path, priority="project")
 
 
-def init_engine():
-    user = settings["MYSQL_USER"]
-    passwd = settings["MYSQL_PASSWD"]
-    host = settings["MYSQL_HOST"]
-    port = settings["MYSQL_PORT"]
-    db = settings["MYSQL_DB"]
+def init_engine(user=None, passwd=None, host=None, port=None, db=None):
+    user = user if user else settings["MYSQL_USER"]
+    passwd = passwd if passwd else settings["MYSQL_PASSWD"]
+    host = host if host else settings["MYSQL_HOST"]
+    port = port if port else settings["MYSQL_PORT"]
+    db = db if db else settings["MYSQL_DB"]
     engine = create_engine(
         "mysql+pymysql://{user}:{passwd}@{host}:{port}/{db}?charset=utf8".format(
             user=user, passwd=passwd, host=host, port=port, db=db

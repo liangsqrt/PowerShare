@@ -1,7 +1,6 @@
 README.md
 setup.py
 PowerShare/__init__.py
-PowerShare/get_data.py
 PowerShare/powershare.py
 PowerShare/setting.py
 PowerShare/ticks.py
@@ -9,4 +8,14 @@ PowerShare.egg-info/PKG-INFO
 PowerShare.egg-info/SOURCES.txt
 PowerShare.egg-info/dependency_links.txt
 PowerShare.egg-info/top_level.txt
+PowerShare/func/__init__.py
+PowerShare/func/deal_mysql_data.py
+PowerShare/func/get_data_func.py
+PowerShare/func/new_sql_types.py
+PowerShare/settings/__init__.py
+PowerShare/settings/default_settings.py
+PowerShare/settings/deprecated.py
+PowerShare/utils/__init__.py
+PowerShare/utils/db_manage.py
+server/__init__.py
 test/__init__.py

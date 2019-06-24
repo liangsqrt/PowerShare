@@ -5,3 +5,11 @@
 # @Site    : 
 # @File    : setting.py
 # @Software: PyCharm
+
+
+MYSQL_USER = "electric_trade"
+MYSQL_HOST = "172.16.15.49"
+MYSQL_PORT = "3306"
+MYSQL_DB = "sc_electric_trade"
+MYSQL_PASSWD = "Abc123456;"
+
